@@ -40,12 +40,12 @@ const userModel = {
   },
 
   //model register
-  register: ({username, password, email, phone, image, level}) => {
+  register: ({username, password, email, phone, level}) => {
     return new Promise ((resolve, reject) => {
       db.query(`
-            INSERT INTO users (username, password, email, phone, image, level)
+            INSERT INTO users (username, password, email, phone, level)
             VALUES
-            ('${username}', '${password}', '${email}', '${phone}', '${image}', ${level})
+            ('${username}', '${password}', '${email}', '${phone}', ${level})
             `, (err, res) => {
         if (err) {
           reject(err)
@@ -56,9 +56,9 @@ const userModel = {
   },
 
   // model login
-  checkUsername: (username) => {
+  checkUsername: (email) => {
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM users WHERE username = '${username}'`, (err, res) => {
+      db.query(`SELECT * FROM users WHERE email = '${email}'`, (err, res) => {
         if(err) {
           reject(err)
         }

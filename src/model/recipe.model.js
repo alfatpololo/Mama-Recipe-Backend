@@ -24,12 +24,12 @@ const recipeModel = {
     })
   },
   // router insert
-  insert: ({title, ingredients, description, image}) => {
+  insert: ({title, ingredients, image}) => {
     return new Promise((resolve, reject) => {
       db.query(`
-            INSERT INTO recipes (title, ingredients, description, image)
+            INSERT INTO recipes (title, ingredients, image)
             VALUES
-            ('${title}', '${ingredients}', '${description}', '${image}')
+            ('${title}', '${ingredients}', '${image}')
             `, (err, res) => {
         if (err) {
           reject(err)
@@ -74,7 +74,7 @@ const recipeModel = {
   //lihat data by title
   detailTitle: (title) => {
     return new Promise((resolve, reject) => {
-        db.query(`select * from recipes where title='${title}'`, (err, res) => {
+        db.query(`select * from recipes where title ilike '%${title}%'`, (err, res) => {
             if(err){
                 reject(err);
             }

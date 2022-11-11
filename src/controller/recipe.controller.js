@@ -23,12 +23,11 @@ const recipeController = {
       //image
       const image = req.file.filename
       //tangkap data dari body
-      const {title, ingredients, description} = req.body;
+      const {title, ingredients} = req.body;
 
           const data = {
               title,
               ingredients,
-              description,
               image
           }
 
@@ -38,7 +37,7 @@ const recipeController = {
           }).catch((err) => {
               failed(res, err.message, 'failed', 'upload recipe failed')
           })
-  } catch {
+  } catch(err) {
       failed(res, err.message, 'failed', 'internal server error');
   }
   },

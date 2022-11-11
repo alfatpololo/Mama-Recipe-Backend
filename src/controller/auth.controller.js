@@ -9,11 +9,10 @@ const jwtToken = require('../helper/generateJWT');
 module.exports = {
     register: (req, res) => {
         try {
-        //image
-        const image = req.file.filename
         //tangkap data dari body
-        const {username, password, email, phone, level} = req.body;
+        const {username, password, email, phone} = req.body;
         bcrypt.hash(password, 10, (err, hash) => {
+            console.log(hash)
             if(err){
                 failed(res, err.message, 'failed', 'failed hash password');
             }
@@ -23,8 +22,7 @@ module.exports = {
                 password: hash,
                 email,
                 phone,
-                image,
-                level
+                level: 0
             }
 
             userModel.register(data).then((result) => {
@@ -40,22 +38,22 @@ module.exports = {
     },
 
     login: async (req, res) => {
-        const {username, password} = req.body;
-        userModel.checkUsername(username).then((result) => {
+        const {email, password} = req.body;
+        userModel.checkUsername(email).then((result) => {
             // console.log(res.rows[0]);
             const user = result.rows[0];
             if(result.rowCount > 0) {
                 bcrypt.compare(password, result.rows[0].password).then(async (result) => {
                     if(result) {
                         const token = await jwtToken({
-                            username: user.username,
+                            email: user.email,
                             level: user.level
                         })
                         console.log(token);
-                        succesWithToken(res, token, "success", "login success");
+                        succesWithToken(res, {token, data:user}, "success", "login success");
                     } else {
                         // ketika password salah
-                        failed(res, null, 'failed', 'username or password is wrong');
+                        failed(res, null, 'failed', 'email or password is wrong');
                     }
                 })
             } else {

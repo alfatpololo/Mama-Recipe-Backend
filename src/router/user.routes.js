@@ -22,7 +22,7 @@ router
   .delete('/user/:id', deleteFile, destroy)
 
   //register
-  .post('/register', upload_user, register)
+  .post('/register', register)
   //login
   .post('/login', login)
 
